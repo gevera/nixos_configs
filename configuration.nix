@@ -20,8 +20,9 @@
   boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
   boot.plymouth.enable = true;
 
-  # networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.hostName = "thinkpad"; # Define your hostname.
+  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.networkmanager.enable = true;
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -35,14 +36,14 @@
 
   
   # Select internationalisation properties.
-  # i18n.defaultLocale = "en_US.UTF-8";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  # };
+  i18n.defaultLocale = "en_US.UTF-8";
+  console = {
+     font = "Lat2-Terminus16";
+     keyMap = "us";
+  };
 
   # Set your time zone.
-  # time.timeZone = "Europe/Amsterdam";
+  time.timeZone = "Asia/Yekaterinburg";
   
   # Allow non-free packages to be installed
   nixpkgs.config.allowUnfree = true;
@@ -59,12 +60,18 @@
     # gnome
     gnome3.gnome-tweaks # shows up in apps after reboot
     # browser
-    google-chrome # shows up in apps after reboot
+    google-chrome firefox # shows up in apps after reboot
     # IDE
     vscode # shows up in apps after reboot
     # npm packages
     nodePackages.typescript
   ];
+
+  # For thinkpad
+  services.tlp.enable = true;
+
+  # Battery power management
+  services.upower.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
