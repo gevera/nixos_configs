@@ -21,58 +21,156 @@
   boot.plymouth.enable = true;
 
   networking.hostName = "thinkpad"; # Define your hostname.
-  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-  networking.interfaces.enp0s3.useDHCP = true;
+  networking.interfaces.enp0s25.useDHCP = true;
+  networking.interfaces.wlp3s0.useDHCP = true;
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-  console = {
+   console = {
      font = "Lat2-Terminus16";
      keyMap = "us";
-  };
+   };
+  
+  # System Fonts
+  fonts.fonts = with pkgs; [
+   cm_unicode
+   noto-fonts
+   noto-fonts-cjk
+   noto-fonts-emoji
+   liberation_ttf
+   ibm-plex
+   montserrat
+   fira-code
+   fira-code-symbols
+   mplus-outline-fonts
+   dina-font
+   open-sans
+   overpass
+   raleway
+   ubuntu_font_family
+  ];
 
   # Set your time zone.
   time.timeZone = "Asia/Yekaterinburg";
-  
+
   # Allow non-free packages to be installed
   nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+
     # command line tools
-    tmux vim wget curl mc ranger htop screenfetch links
+    tmux
+    vim
+    git
+    wget
+    curl
+    mc
+    ranger
+    htop
+    screenfetch
+    links
+
     # minimal
     surf
+    terminator
+
+    # Office
+    libreoffice
+    focuswriter
+    ghostwriter
+    simplenote
+    gnome-latex
+    calibre
+
+    # Imgae Manipulation
+    inkscape
+    gimp
+
+    # Communication
+    tdesktop
+    skypeforlinux
+    zoom-us
+    discord # viber rambox
+
     # development
-    nodejs git
+    nodejs-12_x
+    yarn
+    postman
+    insomnia
+    mongodb-compass
+    dbeaver
+    pgadmin
+    zeal
+
     # gnome
     gnome3.gnome-tweaks # shows up in apps after reboot
+
+    # icons themes
+    deepin.deepin-icon-theme
+    papirus-icon-theme
+    numix-icon-theme
+    arc-icon-theme
+    flat-remix-icon-theme
+    pantheon.elementary-icon-theme
+
+    # gtk themes
+    deepin.deepin-gtk-theme
+    yaru-theme
+    sierra-gtk-theme
+    mojave-gtk-theme
+ 
     # browser
-    google-chrome firefox # shows up in apps after reboot
+    google-chrome # shows up in apps after reboot
+    firefox
+
+    # Downloads
+    transmission-gtk
+    nicotine-plus
+
+    # Media
+     # shortwave # only in unstable
+    audacious
+    vlc
+
     # IDE
     vscode # shows up in apps after reboot
+    xfce.mousepad
+
     # npm packages
     nodePackages.typescript
   ];
-
+  
+  nixpkgs.config.permittedInsecurePackages = [ "openssl-1.0.2u" ];
+  
+  
   # For thinkpad
   services.tlp.enable = true;
 
   # Battery power management
   services.upower.enable = true;
+  
+  # Bluetooth seetings
+  hardware.bluetooth.enable = true;
+  services.blueman.enable = true;
 
+  # VirtualBox setup
+  virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host.enableExtensionPack = true;
+  users.extraGroups.vboxusers.members = [ "codenow" ];
+ 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -106,15 +204,18 @@
   # services.xserver.xkbOptions = "eurosign:e";
 
   # Enable touchpad support.
-  # services.xserver.libinput.enable = true;
+  services.xserver.libinput.enable = true;
 
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.displayManager.gdm.wayland = false;
-  services.xserver.desktopManager.gnome3.enable = true;
-  
+  services.xserver.desktopManager.gnome3.enable = true;  
+
+  # Enable the KDE Desktop Environment.
+  # services.xserver.displayManager.sddm.enable = true;
+  # services.xserver.desktopManager.plasma5.enable = true;
+
   # Enable Fish instead of Bash as a default shell
-  
   programs.fish.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -123,7 +224,7 @@
     isNormalUser = true;
     home = "/home/codenow";
     description = "Code Now";
-    extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "networkmanager"]; # Enable ‘sudo’ for the user.
   };
 
   # This value determines the NixOS release from which the default
@@ -136,7 +237,7 @@
 
 }
 
-## find a npm package available -> typescript is the term
+## find a npm available package -> e.g. typescript is the term
 ## nix-env -qaPA 'nixos.nodePackages' | grep -i typescript
 
 ## edit file and add packages and the rest of config
