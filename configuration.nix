@@ -66,7 +66,15 @@
 
   # Allow non-free packages to be installed
   nixpkgs.config.allowUnfree = true;
+  
+  # Allow NTFS
+  boot.supportedFilesystems = [ "ntfs" ];
 
+  swapDevices = [ { 
+      device = "/dev/sda2"; 
+      size = 8024; # in MB 
+  } ];
+  
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -110,10 +118,13 @@
     yarn
     postman
     insomnia
-    mongodb-compass
+    robo3t
+    mongodb-compass # doesnt work
     dbeaver
     pgadmin
     zeal
+    # data base
+    mongodb-4_0
 
     # gnome
     gnome3.gnome-tweaks # shows up in apps after reboot
@@ -151,7 +162,15 @@
 
     # npm packages
     nodePackages.typescript
+    nodePackages.speed-test
+    nodePackages.nodemon
+    nodePackages.json-server
+    nodePackages.http-server
   ];
+
+  # MongoDB
+  services.mongodb.enable = true;
+  
   
   nixpkgs.config.permittedInsecurePackages = [ "openssl-1.0.2u" ];
   
@@ -161,10 +180,16 @@
 
   # Battery power management
   services.upower.enable = true;
-  
+ 
+  # Fingerprint settings
+  services.fprintd.enable = true;
+  security.pam.services.login.fprintAuth = true; 
+
   # Bluetooth seetings
   hardware.bluetooth.enable = true;
+  hardware.bluetooth.extraConfig = " [General]Enable=Source,Sink,Media,Socket ";
   services.blueman.enable = true;
+  
 
   # VirtualBox setup
   virtualisation.virtualbox.host.enable = true;
@@ -186,17 +211,22 @@
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 8080 3000 5000 27017 ];
+  networking.firewall.allowedUDPPorts = [ 8080 3000 5000 27017 ];
   # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  networking.firewall.enable = true;
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
   # Enable sound.
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio = {
+    enable = true;
+    support32Bit = true;
+    extraModules = [ pkgs.pulseaudio-modules-bt ];
+    package = pkgs.pulseaudioFull;
+  };
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -235,7 +265,7 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "20.03"; # Did you read the comment?
 
-}
+# ====================REMINDERS===================== #  
 
 ## find a npm available package -> e.g. typescript is the term
 ## nix-env -qaPA 'nixos.nodePackages' | grep -i typescript
@@ -254,3 +284,6 @@
 
 ## sudo apt-get upgrade
 ## sudo nixos-rebuild switch
+
+}
+
