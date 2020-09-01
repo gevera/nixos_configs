@@ -6,7 +6,8 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [ # Include the results of the hardware scan
+       <nixos-hardware/lenovo/thinkpad/t420>
       ./hardware-configuration.nix
     ];
 
@@ -90,6 +91,10 @@
     htop
     screenfetch
     links
+    p7zip
+
+    # Utils
+    xsel
 
     # minimal
     surf
@@ -119,15 +124,20 @@
     postman
     insomnia
     robo3t
-    mongodb-compass # doesnt work
+    # mongodb-compass # doesnt work
     dbeaver
-    pgadmin
+    # pgadmin # doesnt work
+    # pgmanage
     zeal
     # data base
-    mongodb-4_0
+    # mongodb-4_0 # doesnt work
 
     # gnome
     gnome3.gnome-tweaks # shows up in apps after reboot
+    gnome3.pomodoro
+
+    # project management
+    elementary-planner
 
     # icons themes
     deepin.deepin-icon-theme
@@ -166,6 +176,7 @@
     nodePackages.nodemon
     nodePackages.json-server
     nodePackages.http-server
+    nodePackages.vue-cli
   ];
 
   # MongoDB
@@ -183,7 +194,7 @@
  
   # Fingerprint settings
   services.fprintd.enable = true;
-  security.pam.services.login.fprintAuth = true; 
+  # security.pam.services.login.fprintAuth = true; 
 
   # Bluetooth seetings
   hardware.bluetooth.enable = true;
@@ -286,4 +297,3 @@
 ## sudo nixos-rebuild switch
 
 }
-
