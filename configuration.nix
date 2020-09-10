@@ -89,6 +89,7 @@
     mc
     ranger
     htop
+    mutt
     screenfetch
     links
     p7zip
@@ -113,6 +114,8 @@
     gimp
 
     # Communication
+    #claws-mail
+    gnome3.geary
     tdesktop
     skypeforlinux
     zoom-us
@@ -177,6 +180,7 @@
     nodePackages.json-server
     nodePackages.http-server
     nodePackages.vue-cli
+        # localtunnel
   ];
 
   # MongoDB
@@ -296,4 +300,8 @@
 ## sudo apt-get upgrade
 ## sudo nixos-rebuild switch
 
+## To add a package from unstable
+# nix-env -f https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz -iA deno
+
 }
+
